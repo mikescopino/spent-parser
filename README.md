@@ -1,6 +1,6 @@
 # Parse a CSV with Javascript
 
-## To Do
+**To Do**
 - Validate if the CSV has the proper headers
 - Create an on the fly Collection as a temp that will later get merged in with all receipts
 - Clean the imported data where it matches
