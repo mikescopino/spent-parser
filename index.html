@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="parserApp">
   <head>
     <meta charset="utf-8">
     <title>Spent Parser</title>
@@ -9,32 +9,24 @@
   <body>
     <div class="container">
       <h1>Spent Parser</h1>
-      <div class="uploader">
-        <input type="file">
-        <button id="parse">Parse</button>
-      </div>
-      <script id="mike-template" type="text/x-handlebars-template">
-        Hello my name is {{name}}
-      </script>
-
-
-      <script id="results-template" type="text/x-handlebars-template">
-        <div id="results-data">
-          {{#rows}}
-            <div>{{data}}</div>
-            <div>{{ref}}</div>
-            <div>{{payee}}</div>
-            <div>{{address}}</div>
-            <div>{{amount}}</div>
-            <hr>
-          {{/rows}}
+      <div ng-controller="parseController as parser">
+        <div class="uploader">
+          <input type="file" ng-model="parser.csvFile">
+          <button ng-click="parser.parse()">Parse</button>
         </div>
-      </script>
-
+        <div ng-repeat="rows in parser.rows">
+          <div>{{rows.data}}</div>
+          <div>{{rows.ref}}</div>
+          <div>{{rows.payee}}</div>
+          <div>{{rows.address}}</div>
+          <div>{{rows.amount}}</div>
+          <hr>
+        </div>
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-2.2.2.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.min.js">
     <script src="js/papaparse.min.js" type="text/javascript"></script>
-    <script src="js/handlebars-v4.0.5.js" type="text/javascript"></script>
     <script src="js/parser.js" type="text/javascript"></script>
   </body>
 </html>
