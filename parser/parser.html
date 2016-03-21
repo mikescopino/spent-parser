@@ -1,0 +1,27 @@
+<head>
+  <title>parser</title>
+</head>
+
+<body>
+  {{> main}}
+</body>
+
+<template name="main">
+  <div class="container">
+    <h1>Spent Parser</h1>
+    <div class="uploader">
+      <input type="file" id="csv-file">
+      <button id="upload-csv">Parse</button>
+    </div>
+    <div class="results">
+      {{#each receipts}}
+        {{data}}
+        {{ref}}
+        {{payee}}
+        {{address}}
+        {{amount}}
+        <hr>
+      {{/each}}
+    </div>
+  </div>
+</template>
