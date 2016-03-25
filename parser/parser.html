@@ -13,6 +13,9 @@
       <input type="file" id="csv-file">
       <button id="upload-csv">Parse</button>
     </div>
+    {{#if errors}}
+      {{> errorMessage errors=errors}}
+    {{/if}}
     <div class="results">
       {{#each receipts}}
         {{data}}
