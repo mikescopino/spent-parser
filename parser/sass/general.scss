@@ -7,6 +7,7 @@ $rule: #eee;
 $fill: #f5f5f5;
 
 $spent-error: #dd514c;
+$spent-status: #0088cc;
 
 /*/////////////////////////////////////////*/
 /* General */
@@ -72,7 +73,7 @@ button {
   padding-top: 5px;
 
   .row {
-    padding: 10px 0;
+    padding: 10px;
     border-bottom: 1px solid $rule;
 
     &.header {
@@ -107,28 +108,36 @@ button {
 /* Error Messages */
 /*/////////////////////////////////////////*/
 
-.errors {
+.messages-wrap {
   padding-top: 5px;
-}
 
-.messages {
-  margin: 0;
-  padding: 20px;
-  background: lighten($spent-error, 8%);
-  color: darken($spent-error, 25%);
+  .messages {
+    margin: 0;
+    padding: 20px;
 
-  .message {
-    margin: 0 0 5px 20px;
-
-    &:first-child {
-      margin: 0 0 7px 0;
-      padding: 0;
-      font-weight: 700;
-      list-style: none;
+    &.error {
+      background: lighten($spent-error, 8%);
+      color: darken($spent-error, 25%);
     }
 
-    &:last-child {
-      margin-bottom: 0;
+    &.status {
+      background: lighten($spent-status, 40%);
+      color: darken($spent-status, 15%);
+    }
+
+    .message {
+      margin: 0 0 5px 20px;
+
+      &:first-child {
+        margin: 0 0 7px 0;
+        padding: 0;
+        font-weight: 700;
+        list-style: none;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }

@@ -22,6 +22,9 @@ if (Meteor.isClient) {
     errors: function () {
       return Session.get('errors');
     },
+    messages: function () {
+      return Session.get('messages');
+    },
   });
 }
 

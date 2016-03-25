@@ -16,6 +16,9 @@
     {{#if errors}}
       {{> errorMessage errors=errors}}
     {{/if}}
+    {{#if messages}}
+      {{> statusMessage messages=messages}}
+    {{/if}}
     {{#if receipts}}
       {{> receiptsList receipts=receipts}}
     {{/if}}

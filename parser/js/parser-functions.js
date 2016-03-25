@@ -57,6 +57,7 @@ uploadReset = function uploadReset(id, template) {
 
 uploadStore = function uploadStore(results) {
   var d = results.data;
+  var m = [];
   for (var i=1; i < d.length; i++) {
     Receipts.insert({
       date : d[i][0],
@@ -66,6 +67,9 @@ uploadStore = function uploadStore(results) {
       amount : d[i][3]
     });
   }
+  m.push(d.length + " receipts added");
+  log(m);
+  Session.set('messages', m);
 }
 
 uploadVerifyFile = function uploadVerifyFile(file, callback) {

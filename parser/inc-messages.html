@@ -1,0 +1,19 @@
+<template name="errorMessage">
+  <div class="messages-wrap">
+    <ul class="messages error">
+    {{#each errors}}
+      <li class="message">{{this}}</li>
+    {{/each}}
+    </ul>
+  </div>
+</template>
+
+<template name="statusMessage">
+  <div class="messages-wrap">
+    <ul class="messages status">
+    {{#each messages}}
+      <li class="message">{{this}}</li>
+    {{/each}}
+    </ul>
+  </div>
+</template>
