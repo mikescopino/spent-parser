@@ -5,12 +5,12 @@ if (Meteor.isClient) {
   Template.main.events({
     "click #upload-csv": function(event, template) {
       var id = '#csv-file';
+      var file = template.find(id).files[0];
+
       Session.set('errors', false);
-      if (template.find(id).files[0]){
-        Papa.parse(template.find(id).files[0], {
-          error: function(err, file, inputElem, reason) {
-            console.log(err);
-          },
+
+      if (file){
+        Papa.parse(file, {
           skipEmptyLines : true,
           complete: function(results) {
             log(results);
@@ -22,7 +22,7 @@ if (Meteor.isClient) {
         });
       }
       else {
-        console.log('Error: You must select a valid CSV file');
+        log('Error: You must select a valid CSV file');
       }
    }
  });
