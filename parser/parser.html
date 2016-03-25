@@ -16,15 +16,29 @@
     {{#if errors}}
       {{> errorMessage errors=errors}}
     {{/if}}
-    <div class="results">
-      {{#each receipts}}
-        {{data}}
-        {{ref}}
-        {{payee}}
-        {{address}}
-        {{amount}}
-        <hr>
-      {{/each}}
+    {{#if receipts}}
+      {{> receiptsList receipts=receipts}}
+    {{/if}}
+  </div>
+</template>
+
+<template name="receiptsList">
+  <div class="receipts">
+    <div class="row header">
+      <div class="cell data"><span class="content">Date</span></div>
+      <div class="cell payee"><span class="content">Payee</span></div>
+      <div class="cell category"><span class="content">Category</span></div>
+      <div class="cell account"><span class="content">Account</span></div>
+      <div class="cell amount"><span class="content">Amount</span></div>
     </div>
+    {{#each receipts}}
+      <div class="row">
+        <div class="cell data"><span class="content">{{date}}</span></div>
+        <div class="cell payee"><span class="content">{{payee}}</span></div>
+        <div class="cell category"><span class="content">{{category}}&ndash;</span></div>
+        <div class="cell account"><span class="content">{{account}}</span></div>
+        <div class="cell amount"><span class="content">{{amount}}</span></div>
+      </div>
+    {{/each}}
   </div>
 </template>

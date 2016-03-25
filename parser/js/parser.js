@@ -5,6 +5,7 @@ if (Meteor.isClient) {
   Template.main.events({
     "click #upload-csv": function(event, template) {
       var id = '#csv-file';
+      Session.set('errors', false);
       if (template.find(id).files[0]){
         Papa.parse(template.find(id).files[0], {
           error: function(err, file, inputElem, reason) {
@@ -12,6 +13,7 @@ if (Meteor.isClient) {
           },
           skipEmptyLines : true,
           complete: function(results) {
+            log(results);
             uploadVerify(results, function(){
               uploadStore(results);
             });
@@ -27,7 +29,11 @@ if (Meteor.isClient) {
 
   Template.main.helpers({
     receipts: function () {
-      return Receipts.find({});
+      var reply = false;
+      if (Receipts.find({}).count() > 0) {
+        reply = Receipts.find({});
+      }
+      return reply;
     },
     errors: function () {
       return Session.get('errors');

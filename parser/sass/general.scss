@@ -1,0 +1,127 @@
+/*/////////////////////////////////////////*/
+/* Variables */
+/*/////////////////////////////////////////*/
+
+$text-1: #333;
+$rule: #eee;
+
+$spent-error: #dd514c;
+
+/*/////////////////////////////////////////*/
+/* General */
+/*/////////////////////////////////////////*/
+
+body {
+  padding-top: 70px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3em;
+  color: #333;
+}
+
+.container {
+  padding: 0 30px;
+}
+
+h1 {
+  display: block;
+  margin: 0 0 20px 0;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.1em;
+}
+
+/*/////////////////////////////////////////*/
+/* Input */
+/*/////////////////////////////////////////*/
+
+.uploader {
+  padding: 15px;
+  border: 1px solid $rule;
+  background: #f5f5f5
+}
+
+input[type=file] {
+  position: relative;
+  top: -2px;
+  display: inline-block;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid $rule;
+  background: #fff;
+}
+
+button {
+  display: inline-block;
+  border: none;
+  padding: 8px 14px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  background: #333;
+  border-radius: 2px;
+}
+
+/*/////////////////////////////////////////*/
+/* Receipts List */
+/*/////////////////////////////////////////*/
+
+.receipts {
+  padding-top: 5px;
+
+  .row {
+    padding: 10px 0;
+    border-bottom: 1px solid $rule;
+
+    &.header {
+      font-weight: 800;
+      background: $rule;
+    }
+
+    &:after {
+      content: ".";
+      display: block;
+      clear: both;
+      visibility: hidden;
+      line-height: 0;
+      height: 0;
+    }
+  }
+
+  .cell {
+    float: left;
+    display: block;
+    width: 20%;
+
+    .content {
+      padding: 5px;
+    }
+  }
+}
+
+/*/////////////////////////////////////////*/
+/* Error Messages */
+/*/////////////////////////////////////////*/
+
+.errors {
+  padding-top: 5px;
+}
+
+.messages {
+  margin: 0;
+  padding: 20px;
+  background: lighten($spent-error, 8%);
+  color: darken($spent-error, 25%);
+
+  .message {
+    margin: 0 0 5px 20px;
+
+    &:first-child {
+      margin: 0 0 7px 0;
+      padding: 0;
+      font-weight: 700;
+      list-style: none;
+    }
+  }
+}
