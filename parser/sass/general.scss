@@ -4,6 +4,7 @@
 
 $text-1: #333;
 $rule: #eee;
+$fill: #f5f5f5;
 
 $spent-error: #dd514c;
 
@@ -39,7 +40,7 @@ h1 {
 .uploader {
   padding: 15px;
   border: 1px solid $rule;
-  background: #f5f5f5
+  background: $fill;
 }
 
 input[type=file] {
@@ -76,7 +77,9 @@ button {
 
     &.header {
       font-weight: 800;
-      background: $rule;
+      padding: 10px 9px;
+      border: 1px solid $rule;
+      background: $fill;
     }
 
     &:after {
@@ -122,6 +125,10 @@ button {
       padding: 0;
       font-weight: 700;
       list-style: none;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 }

@@ -3,29 +3,13 @@ Receipts = new Mongo.Collection("receipts");
 if (Meteor.isClient) {
 
   Template.main.events({
+    "change #csv-file": function(event, template) {
+      errorClearMessage();
+    },
     "click #upload-csv": function(event, template) {
-      var id = '#csv-file';
-      var file = template.find(id).files[0];
-
-      Session.set('errors', false);
-
-      if (file){
-        Papa.parse(file, {
-          skipEmptyLines : true,
-          complete: function(results) {
-            log(results);
-            uploadVerify(results, function(){
-              uploadStore(results);
-            });
-            uploadReset(id, template);
-          }
-        });
-      }
-      else {
-        log('Error: You must select a valid CSV file');
-      }
-   }
- });
+      upload('#csv-file', template);
+    }
+  });
 
   Template.main.helpers({
     receipts: function () {
@@ -39,8 +23,6 @@ if (Meteor.isClient) {
       return Session.get('errors');
     },
   });
-
-
 }
 
 if (Meteor.isServer) {

@@ -18,8 +18,38 @@ log = function log(info) {
 }
 
 //////////////////////////////////////////
+// Errors
+//////////////////////////////////////////
+
+errorClearMessage = function errorClearMessage() {
+  Session.set('errors', false);
+}
+
+//////////////////////////////////////////
 // Uploads
 //////////////////////////////////////////
+
+upload = function upload(target, template) {
+  var id = target;
+  var file = template.find(id).files[0];
+
+  errorClearMessage();
+
+  if (file){
+    uploadVerifyFile(file, function() {
+      Papa.parse(file, {
+        skipEmptyLines : true,
+        complete: function(results) {
+          log(results);
+          uploadVerifyContents(results, function(){
+            uploadStore(results);
+          });
+          uploadReset(id, template);
+        }
+      });
+    });
+  }
+}
 
 uploadReset = function uploadReset(id, template) {
   template.find('#csv-file').value = null;
@@ -38,7 +68,27 @@ uploadStore = function uploadStore(results) {
   }
 }
 
-uploadVerify = function uploadVerify(results, callback) {
+uploadVerifyFile = function uploadVerifyFile(file, callback) {
+  var n = file.name;
+  var re = /(?:\.([^.]+))?$/;
+  var ext = re.exec(n)[1];
+  var e = [];
+  var valid = true;
+
+  if (ext != 'csv') {
+    valid = false;
+    e.push("Dang. Your file is a " + ext.toUpperCase() + " when it needs to be a CSV");
+    Session.set('errors', e);
+    log(e);
+  }
+
+  if (valid) {
+    callback();
+  }
+}
+
+
+uploadVerifyContents = function uploadVerify(results, callback) {
   var d = results.data;
   var e = [];
   var valid = true;
