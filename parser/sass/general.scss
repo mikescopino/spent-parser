@@ -83,6 +83,10 @@ button {
       background: $fill;
     }
 
+    &.changed {
+      background: lighten($spent-status, 58%);
+    }
+
     &:after {
       content: ".";
       display: block;
@@ -105,7 +109,7 @@ button {
 }
 
 /*/////////////////////////////////////////*/
-/* Error Messages */
+/* Status Messages */
 /*/////////////////////////////////////////*/
 
 .messages-wrap {

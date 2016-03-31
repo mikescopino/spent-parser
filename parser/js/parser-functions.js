@@ -26,6 +26,57 @@ errorClearMessage = function errorClearMessage() {
 }
 
 //////////////////////////////////////////
+// Processes
+//////////////////////////////////////////
+
+processEvent = function processEvent(event) {
+  event.preventDefault();
+  log(event);
+  var element = event['currentTarget'];
+  var id = element['id'];
+  var d = Receipts.findOne(id);
+  log('You clicked on ' + id);
+  var check = processCheckCategory(d['payee'], id);
+  if (check) {
+    Receipts.update(id, {$set: {changed: true}})
+  }
+}
+
+processCheckCategory = function processCheckCategory(p, id) {
+  var regs = Expressions.find({}).fetch();
+  var changed = false;
+
+  if (regs.length > 0) {
+    for (var i = 0; i < regs.length; i++) {
+      var ex = regs[i]['reg'];
+      var check = p.indexOf(ex);
+      if (check !== -1) {
+        Receipts.update(id, {
+          $set: {
+            payee: regs[i]['name'],
+            category: regs[i]['category']
+          }
+        });
+        changed = true;
+        log(ex +' matched: ' + regs[i]['name']);
+      }
+    }
+    if (!changed) {
+      log('There were no matches');
+    }
+  }
+  else {
+    log('There are no regexs to check against');
+  }
+
+  return changed;
+}
+
+processMarkRow = function processMarkRow(element) {
+  element.addClass("updated");
+}
+
+//////////////////////////////////////////
 // Uploads
 //////////////////////////////////////////
 
@@ -61,7 +112,7 @@ uploadStore = function uploadStore(results) {
   for (var i=1; i < d.length; i++) {
     Receipts.insert({
       date : d[i][0],
-      category : '',
+      category : '&#8211;',
       account : d[i][1],
       payee : d[i][2],
       amount : d[i][3]
@@ -90,7 +141,6 @@ uploadVerifyFile = function uploadVerifyFile(file, callback) {
     callback();
   }
 }
-
 
 uploadVerifyContents = function uploadVerify(results, callback) {
   var d = results.data;

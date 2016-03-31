@@ -1,4 +1,5 @@
 Receipts = new Mongo.Collection("receipts");
+Expressions = new Mongo.Collection("expressions");
 
 if (Meteor.isClient) {
 
@@ -8,7 +9,7 @@ if (Meteor.isClient) {
     },
     "click #upload-csv": function(event, template) {
       upload('#csv-file', template);
-    }
+    },
   });
 
   Template.main.helpers({
@@ -25,6 +26,22 @@ if (Meteor.isClient) {
     messages: function () {
       return Session.get('messages');
     },
+  });
+
+  Template.receiptsList.events({
+    "click .row": function(event, template) {
+      processEvent(event);
+    },
+  });
+
+  Template.receiptsList.helpers({
+    status: function () {
+
+      if (Receipts.find({}).count() > 0) {
+        reply = Receipts.find({});
+      }
+      return reply;
+    }
   });
 }
 
