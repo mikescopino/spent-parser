@@ -1,6 +1,3 @@
-Receipts = new Mongo.Collection("receipts");
-Expressions = new Mongo.Collection("expressions");
-
 if (Meteor.isClient) {
 
   Template.main.events({
@@ -14,11 +11,7 @@ if (Meteor.isClient) {
 
   Template.main.helpers({
     receipts: function () {
-      var reply = false;
-      if (Receipts.find({}).count() > 0) {
-        reply = Receipts.find({});
-      }
-      return reply;
+      return getReceipts();
     },
     errors: function () {
       return Session.get('errors');
@@ -36,11 +29,7 @@ if (Meteor.isClient) {
 
   Template.receiptsList.helpers({
     status: function () {
-
-      if (Receipts.find({}).count() > 0) {
-        reply = Receipts.find({});
-      }
-      return reply;
+      return getReceiptsStatus();
     }
   });
 }

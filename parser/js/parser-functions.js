@@ -1,3 +1,37 @@
+Receipts = new Mongo.Collection("receipts");
+Expressions = new Mongo.Collection("expressions");
+
+//////////////////////////////////////////
+// Errors
+//////////////////////////////////////////
+
+errorClearMessage = function errorClearMessage() {
+  Session.set('errors', false);
+}
+
+//////////////////////////////////////////
+// Errors
+//////////////////////////////////////////
+
+// Pull Receipts to populate the template
+getReceipts = function getReceipts() {
+  var reply = false;
+  if (Receipts.find({}).count() > 0) {
+    reply = Receipts.find({});
+  }
+
+  return reply
+}
+
+// Check the status of Receipts to hide/show header
+getReceiptsStatus = function getReceiptsStatus() {
+  if (Receipts.find({}).count() > 0) {
+    reply = Receipts.find({});
+  }
+
+  return reply
+}
+
 //////////////////////////////////////////
 // Logging
 //////////////////////////////////////////
@@ -18,30 +52,27 @@ log = function log(info) {
 }
 
 //////////////////////////////////////////
-// Errors
-//////////////////////////////////////////
-
-errorClearMessage = function errorClearMessage() {
-  Session.set('errors', false);
-}
-
-//////////////////////////////////////////
 // Processes
 //////////////////////////////////////////
 
+// Compare the clicked row to Expressions
 processEvent = function processEvent(event) {
   event.preventDefault();
-  log(event);
+  
   var element = event['currentTarget'];
   var id = element['id'];
   var d = Receipts.findOne(id);
-  log('You clicked on ' + id);
   var check = processCheckCategory(d['payee'], id);
   if (check) {
-    Receipts.update(id, {$set: {changed: true}})
+    Receipts.update(id, {
+      $set: {
+        changed: true
+      }
+    });
   }
 }
 
+// Compare the data to Expressions
 processCheckCategory = function processCheckCategory(p, id) {
   var regs = Expressions.find({}).fetch();
   var changed = false;
@@ -51,14 +82,17 @@ processCheckCategory = function processCheckCategory(p, id) {
       var ex = regs[i]['reg'];
       var check = p.indexOf(ex);
       if (check !== -1) {
+        // Update Receipt
         Receipts.update(id, {
           $set: {
             payee: regs[i]['name'],
-            category: regs[i]['category']
+            category: regs[i]['category'],
+            oldPayee: p
           }
         });
         changed = true;
         log(ex +' matched: ' + regs[i]['name']);
+        log('We stored ' + p + ' as the oldPayee');
       }
     }
     if (!changed) {
@@ -72,6 +106,7 @@ processCheckCategory = function processCheckCategory(p, id) {
   return changed;
 }
 
+// Add a class to the row if it's been updated
 processMarkRow = function processMarkRow(element) {
   element.addClass("updated");
 }
@@ -80,6 +115,7 @@ processMarkRow = function processMarkRow(element) {
 // Uploads
 //////////////////////////////////////////
 
+// Process form upload
 upload = function upload(target, template) {
   var id = target;
   var file = template.find(id).files[0];
@@ -102,10 +138,12 @@ upload = function upload(target, template) {
   }
 }
 
+// Clear the input
 uploadReset = function uploadReset(id, template) {
   template.find('#csv-file').value = null;
 }
 
+// Write to Receipts
 uploadStore = function uploadStore(results) {
   var d = results.data;
   var m = [];
@@ -123,6 +161,7 @@ uploadStore = function uploadStore(results) {
   Session.set('messages', m);
 }
 
+// Confirm that the file is a CSV
 uploadVerifyFile = function uploadVerifyFile(file, callback) {
   var n = file.name;
   var re = /(?:\.([^.]+))?$/;
@@ -142,6 +181,7 @@ uploadVerifyFile = function uploadVerifyFile(file, callback) {
   }
 }
 
+// Check that the file has the proper columns
 uploadVerifyContents = function uploadVerify(results, callback) {
   var d = results.data;
   var e = [];
