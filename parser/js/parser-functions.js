@@ -10,7 +10,7 @@ errorClearMessage = function errorClearMessage() {
 }
 
 //////////////////////////////////////////
-// Errors
+// Evaluation
 //////////////////////////////////////////
 
 // Pull Receipts to populate the template
@@ -30,6 +30,38 @@ getReceiptsStatus = function getReceiptsStatus() {
   }
 
   return reply
+}
+
+//////////////////////////////////////////
+// Interactions
+//////////////////////////////////////////
+
+var hover = false;
+toggleTooltip = function toggleTooltip (event, element) {
+
+  // NOTE This test should not be in the resuable toggle function
+  var p = event.currentTarget.parentNode;
+  var t = false;
+  for (var i = 0; i < p.classList.length; i++) {
+    if (p.classList[i] == 'changed') {
+      t = true;
+    }
+  }
+
+  // NOTE This interaction doesn't work smoothly yet
+  if (t) {
+    var t = event.currentTarget.getElementsByClassName(element);
+    if (!hover) {
+      log('mouseenter')
+      hover = true;
+      t[0].classList.add('show');
+    }
+    else {
+      log('mouseleave')
+      hover = false;
+      t[0].classList.remove('show');
+    }
+  }
 }
 
 //////////////////////////////////////////
@@ -58,7 +90,7 @@ log = function log(info) {
 // Compare the clicked row to Expressions
 processEvent = function processEvent(event) {
   event.preventDefault();
-  
+
   var element = event['currentTarget'];
   var id = element['id'];
   var d = Receipts.findOne(id);

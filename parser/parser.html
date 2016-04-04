@@ -37,7 +37,10 @@
     {{#each receipts}}
       <div class="row {{#if changed}}changed{{/if}}" id="{{_id}}">
         <div class="cell data"><span class="content">{{date}}</span></div>
-        <div class="cell payee"><span class="content">{{payee}}</span></div>
+        <div class="cell payee">
+          <span class="content">{{payee}}</span>
+          <span class="tooltip old-payee">{{oldPayee}}</span>
+        </div>
         <div class="cell category"><span class="content">{{{category}}}</span></div>
         <div class="cell account"><span class="content">{{account}}</span></div>
         <div class="cell amount"><span class="content">{{amount}}</span></div>
