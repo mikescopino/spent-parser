@@ -21,18 +21,15 @@ if (Meteor.isClient) {
     },
   });
 
-  var closeTipTimer;
   Template.receiptsList.events({
     "click .row": function(event) {
       processEvent(event);
     },
     "mouseover .payee": function(event, template) {
-      toggleTooltip(event, 'old-payee');
+      payeeTooltip(event, 'old-payee', 'show');
     },
     "mouseout .payee": function(event, template) {
-      closeTipTimer = setTimeout(function() {
-        toggleTooltip(event, 'old-payee');
-      }, 300);
+      payeeTooltip(event, 'old-payee', 'hide');
     },
   });
 

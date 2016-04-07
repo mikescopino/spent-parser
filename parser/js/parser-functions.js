@@ -36,31 +36,29 @@ getReceiptsStatus = function getReceiptsStatus() {
 // Interactions
 //////////////////////////////////////////
 
-var hover = false;
-toggleTooltip = function toggleTooltip (event, element) {
-
+payeeTooltip = function payeeTooltip(event, element, direction) {
   // NOTE This test should not be in the resuable toggle function
   var p = event.currentTarget.parentNode;
-  var t = false;
   for (var i = 0; i < p.classList.length; i++) {
     if (p.classList[i] == 'changed') {
-      t = true;
+      toggleTooltip(event, element, direction);
     }
   }
+}
 
-  // NOTE This interaction doesn't work smoothly yet
-  if (t) {
-    var t = event.currentTarget.getElementsByClassName(element);
-    if (!hover) {
-      log('mouseenter')
-      hover = true;
-      t[0].classList.add('show');
-    }
-    else {
-      log('mouseleave')
-      hover = false;
-      t[0].classList.remove('show');
-    }
+toggleTooltip = function toggleTooltip (event, element, direction) {
+  var target = event.currentTarget.getElementsByClassName(element);
+  switch (direction) {
+    case 'show':
+      target[0].classList.add('show');
+      log('mouseover')
+      break;
+    case 'hide':
+      var closeTipTimer = setTimeout(function() {
+        target[0].classList.remove('show');
+        log('mouseout');
+      }, 200);
+      break;
   }
 }
 

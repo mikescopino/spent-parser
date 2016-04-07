@@ -104,7 +104,9 @@ button {
     width: 20%;
 
     .content {
+      display: block;
       padding: 5px;
+      cursor: default;
     }
   }
 }
@@ -116,17 +118,45 @@ button {
 .tooltip {
   display: none;
   position: absolute;
-  left: 0;
-  bottom: 30px;
+  left: -2px;
+  bottom: 36px;
   width: 300px;
-  padding: 20px;
+  padding: 15px 15px 17px 15px;
   background: #fff;
   font-size: 14px;
   z-index: 10;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
 
   &.show {
     display: block;
+  }
+
+  &:before {
+    position: absolute;
+    bottom: -8px;
+    left: 14px;
+    display: inline-block;
+    border-top: 8px solid rgba(0, 0, 0, 0.1);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    content: "";
+  }
+
+  &:after {
+    position: absolute;
+    bottom: -6px;
+    left: 16px;
+    display: inline-block;
+    border-top: 6px solid #fff;
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: '';
+  }
+
+  strong {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 3px;
   }
 }
 
