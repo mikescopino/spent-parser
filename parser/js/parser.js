@@ -22,9 +22,9 @@ if (Meteor.isClient) {
   });
 
   Template.receiptsList.events({
-    "click .row": function(event) {
-      processEvent(event);
-    },
+    // "click .row": function(event) {
+    //   processEvent(event);
+    // },
     "mouseover .payee": function(event, template) {
       payeeTooltip(event, 'old-payee', 'show');
     },

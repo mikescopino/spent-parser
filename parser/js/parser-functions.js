@@ -86,21 +86,76 @@ log = function log(info) {
 //////////////////////////////////////////
 
 // Compare the clicked row to Expressions
-processEvent = function processEvent(event) {
-  event.preventDefault();
+// processEvent = function processEvent(event) {
+//   event.preventDefault();
+//
+//   var element = event['currentTarget'];
+//   var id = element['id'];
+//   var d = Receipts.findOne(id);
+//   var check = processCheckCategory(d['payee'], id);
+//   if (check) {
+//     Receipts.update(id, {
+//       $set: {
+//         changed: true
+//       }
+//     });
+//   }
+// }
 
-  var element = event['currentTarget'];
-  var id = element['id'];
-  var d = Receipts.findOne(id);
-  var check = processCheckCategory(d['payee'], id);
-  if (check) {
-    Receipts.update(id, {
-      $set: {
-        changed: true
-      }
-    });
+processCleanData = function processCleanData(results, callback) {
+  var d = results.data;
+  var m = [];
+
+  // 1. Remove credits
+  for (var i=1; i < d.length; i++) {
+    if (d[i][3] > 0) {
+      delete d[i];
+    }
+    else {
+      d[i][3] = d[i][3] * -1;
+    }
   }
+
+  // 2. Check categories
+  var regs = Expressions.find({}).fetch();
+  var changed = false;
+
+  // a. Do we have regular expressions?
+  if (regs.length > 0) {
+    // b. Loop through the data
+    for (var i = 0; i < d.length; i++) {
+      var row = d[i];
+      // c. Does the row exist
+      if (row) {
+        for (var x = 0; x < regs.length; x++) {
+          var ex = regs[x]['reg'];
+          var check = row[2].indexOf(ex);
+          // d. Does the regex match the row
+          if (check !== -1) {
+            row[5] = row[2];
+            row[2] = regs[x]['name'];
+            row[4] = regs[x]['category'];
+            row[6] = true;
+            changed = true;
+            log(ex +' matched: ' + regs[x]['name']);
+            log('We stored ' + row[5] + ' as the oldPayee');
+          }
+          else {
+            row[4] = '';
+            row[5] = '';
+            row[6] = false;
+          }
+        }
+      }
+    }
+  }
+  else {
+    log('There are no regexs to check against');
+  }
+
+  callback(d);
 }
+
 
 // Compare the data to Expressions
 processCheckCategory = function processCheckCategory(p, id) {
@@ -159,7 +214,10 @@ upload = function upload(target, template) {
         complete: function(results) {
           log(results);
           uploadVerifyContents(results, function(){
-            uploadStore(results);
+            processCleanData(results, function(data){
+              //log(data);
+              uploadStore(data);
+            })
           });
           uploadReset(id, template);
         }
@@ -174,17 +232,21 @@ uploadReset = function uploadReset(id, template) {
 }
 
 // Write to Receipts
-uploadStore = function uploadStore(results) {
-  var d = results.data;
+uploadStore = function uploadStore(data) {
+  var d = data;
   var m = [];
   for (var i=1; i < d.length; i++) {
-    Receipts.insert({
-      date : d[i][0],
-      category : '&#8211;',
-      account : d[i][1],
-      payee : d[i][2],
-      amount : d[i][3]
-    });
+    if (d[i]) {
+      Receipts.insert({
+        date : d[i][0],
+        category : d[i][4],
+        account : d[i][1],
+        payee : d[i][2],
+        amount : d[i][3],
+        oldPayee : d[i][5],
+        changed : d[i][6]
+      });
+    }
   }
   m.push(d.length + " receipts added");
   log(m);
