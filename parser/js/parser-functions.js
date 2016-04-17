@@ -25,6 +25,7 @@ getReceipts = function getReceipts() {
 
 // Check the status of Receipts to hide/show header
 getReceiptsStatus = function getReceiptsStatus() {
+  var reply = false;
   if (Receipts.find({}).count() > 0) {
     reply = Receipts.find({});
   }
@@ -118,7 +119,6 @@ processCleanData = function processCleanData(results, callback) {
 
   // 2. Check categories
   var regs = Expressions.find({}).fetch();
-  var changed = false;
 
   // a. Do we have regular expressions?
   if (regs.length > 0) {
@@ -127,6 +127,10 @@ processCleanData = function processCleanData(results, callback) {
       var row = d[i];
       // c. Does the row exist
       if (row) {
+        row[4] = '';
+        row[5] = '';
+        row[6] = false;
+
         for (var x = 0; x < regs.length; x++) {
           var ex = regs[x]['reg'];
           var check = row[2].indexOf(ex);
@@ -136,14 +140,8 @@ processCleanData = function processCleanData(results, callback) {
             row[2] = regs[x]['name'];
             row[4] = regs[x]['category'];
             row[6] = true;
-            changed = true;
             log(ex +' matched: ' + regs[x]['name']);
             log('We stored ' + row[5] + ' as the oldPayee');
-          }
-          else {
-            row[4] = '';
-            row[5] = '';
-            row[6] = false;
           }
         }
       }
@@ -299,5 +297,21 @@ uploadVerifyContents = function uploadVerify(results, callback) {
 
   if (valid) {
     callback();
+  }
+}
+
+//////////////////////////////////////////
+// Reset
+//////////////////////////////////////////
+
+clearReceipts = function clearReceipts() {
+  var receipts = Receipts.find({}).fetch();
+
+  if (receipts.length > 0) {
+    for (var i = 0; i < receipts.length; i++) {
+      var id = receipts[i]['_id'];
+      Receipts.remove(id);
+      Session.set('messages', false);
+    }
   }
 }
