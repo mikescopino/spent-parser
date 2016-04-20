@@ -5,6 +5,7 @@ Expressions = new Mongo.Collection("expressions");
 // Errors
 //////////////////////////////////////////
 
+// NOTE Classified
 errorClearMessage = function errorClearMessage() {
   Session.set('errors', false);
 }
@@ -52,12 +53,12 @@ toggleTooltip = function toggleTooltip (event, element, direction) {
   switch (direction) {
     case 'show':
       target[0].classList.add('show');
-      log('mouseover')
+      //log('mouseover')
       break;
     case 'hide':
       var closeTipTimer = setTimeout(function() {
         target[0].classList.remove('show');
-        log('mouseout');
+        //log('mouseout');
       }, 200);
       break;
   }
@@ -198,6 +199,7 @@ processMarkRow = function processMarkRow(element) {
 // Uploads
 //////////////////////////////////////////
 
+// NOTE Classified
 // Process form upload
 upload = function upload(target, template) {
   var id = target;

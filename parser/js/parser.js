@@ -1,11 +1,13 @@
 if (Meteor.isClient) {
+  var parser = new Parser();
 
   Template.main.events({
     "change #csv-file": function(event, template) {
       errorClearMessage();
     },
     "click #upload-csv": function(event, template) {
-      upload('#csv-file', template);
+      //upload('#csv-file', template);
+      parser.event.uploadFile('#csv-file', template);
     },
   });
 
