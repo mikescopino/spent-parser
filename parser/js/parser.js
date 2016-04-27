@@ -1,7 +1,7 @@
 if (Meteor.isClient) {
   var parser = new Parser();
 
-  Template.main.events({
+  Template.parser.events({
     "change #csv-file": function(event, template) {
       errorClearMessage();
     },
@@ -11,7 +11,7 @@ if (Meteor.isClient) {
     },
   });
 
-  Template.main.helpers({
+  Template.parser.helpers({
     receipts: function () {
       return getReceipts();
     },
