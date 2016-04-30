@@ -36,10 +36,39 @@ Parser.prototype = {
   process: {
     cleanData: function(data) {
       var valid = false;
+      var d = data;
+      var steps = [
+        removeCredits = function(stepData) {
+          // TODO Figure out how to return validity
+          Parser.prototype.process.removeCredits(stepData);
+        },
+        compareToRegEx  = function(stepData) {
+          // TODO Figure out how to return validity
+          Parser.prototype.process.compareToRegEx(stepData);
+        },
+      ];
+
+
       if (data.length > 0) {
+        log('CLEANING STARTED:');
+        // Data exists, so give it the benefit of the doubt
         valid = true;
+
+        for (var i = 0; i < steps.length; i++) {
+          // Skip further steps if cleaning fails
+          if (valid) {
+            valid = steps[i](d);
+          }
+        }
+      }
+      else {
+        log('ERROR: There were no rows in the data');
       }
       return valid;
+    },
+    compareToRegEx: function() {
+      log('> Categories have been checked');
+      // TODO Add actual logic
     },
     parseCSV: function(csv) {
       Papa.parse(csv, {
@@ -54,7 +83,6 @@ Parser.prototype = {
 
             if (clean) {
               log('> Data ready for display');
-              log(d);
             }
             else {
               log('ERROR: The data is still dirty');
@@ -65,6 +93,10 @@ Parser.prototype = {
           }
         }
       });
+    },
+    removeCredits: function() {
+      log('> Credits have been removed');
+      // TODO Add actual logic
     },
     verifyFile: function(file) {
       var n = file.name;
