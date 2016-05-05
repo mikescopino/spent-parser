@@ -11,10 +11,11 @@ Parser.prototype = {
       var m = [];
       for (var i=1; i < d.length; i++) {
         if (d[i]) {
-          var date = new Date(d[i][0]);
+          var date = moment(d[i][0], "M/D/YY");
+          date = date.format('YYYY-MM-DD');
           log(date);
           Receipts.insert({
-            date : d[i][0],
+            date : date,
             category : d[i][4],
             account : d[i][1],
             payee : d[i][2],

@@ -36,6 +36,13 @@ if (Meteor.isClient) {
   });
 
   Template.receiptsList.helpers({
+    humanDate: function() {
+      //return 'hello';
+      return moment(this.date).format("M/DD/YYYY");
+    },
+    humanAmount: function() {
+      return '$' + this.amount;
+    },
     status: function () {
       return getReceiptsStatus();
     }
