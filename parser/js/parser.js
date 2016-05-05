@@ -1,5 +1,5 @@
 if (Meteor.isClient) {
-  var parser = new Parser();
+  parser = new Parser();
 
   Template.parser.events({
     "change #csv-file": function(event, template) {

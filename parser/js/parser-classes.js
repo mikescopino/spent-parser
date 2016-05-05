@@ -6,14 +6,14 @@ Parser.prototype = {
 
   // Data
   db: {
-    insertData: function(data) {
+    insertReceipt: function(data) {
       var d = data;
       var m = [];
       for (var i=1; i < d.length; i++) {
         if (d[i]) {
           var date = moment(d[i][0], "M/D/YY");
           date = date.format('YYYY-MM-DD');
-          log(date);
+          
           Receipts.insert({
             date : date,
             category : d[i][4],
@@ -28,6 +28,17 @@ Parser.prototype = {
       m.push(d.length + " receipts added");
       log(m);
       Session.set('messages', m);
+    },
+    removeAllReceipts: function() {
+      var receipts = Receipts.find({}).fetch();
+
+      if (receipts.length > 0) {
+        for (var i = 0; i < receipts.length; i++) {
+          var id = receipts[i]['_id'];
+          Receipts.remove(id);
+          Session.set('messages', false);
+        }
+      }
     }
   },
 
@@ -149,7 +160,7 @@ Parser.prototype = {
 
             if (clean) {
               log('> Data ready for display');
-              Parser.prototype.db.insertData(clean);
+              Parser.prototype.db.insertReceipt(clean);
 
             }
             else {

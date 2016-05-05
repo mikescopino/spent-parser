@@ -93,19 +93,3 @@ log = function log(info) {
 processMarkRow = function processMarkRow(element) {
   element.addClass("updated");
 }
-
-//////////////////////////////////////////
-// Reset
-//////////////////////////////////////////
-
-clearReceipts = function clearReceipts() {
-  var receipts = Receipts.find({}).fetch();
-
-  if (receipts.length > 0) {
-    for (var i = 0; i < receipts.length; i++) {
-      var id = receipts[i]['_id'];
-      Receipts.remove(id);
-      Session.set('messages', false);
-    }
-  }
-}
