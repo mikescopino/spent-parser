@@ -18,7 +18,9 @@ errorClearMessage = function errorClearMessage() {
 getReceipts = function getReceipts() {
   var reply = false;
   if (Receipts.find({}).count() > 0) {
-    reply = Receipts.find({});
+    reply = Receipts.find({}, {
+      sort: {date: 1}
+    });
   }
 
   return reply

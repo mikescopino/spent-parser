@@ -21,3 +21,4 @@ fourseven:scss
 iron:router
 standard-minifier-css
 standard-minifier-js
+momentjs:moment
