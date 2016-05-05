@@ -3,10 +3,12 @@ if (Meteor.isClient) {
 
   Template.parser.events({
     "change #csv-file": function(event, template) {
+      template.find('#upload-csv').focus();
       errorClearMessage();
     },
     "click #upload-csv": function(event, template) {
       //upload('#csv-file', template);
+      template.find('#upload-csv').blur();
       parser.event.uploadFile('#csv-file', template);
     },
   });

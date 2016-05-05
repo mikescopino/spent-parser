@@ -11,15 +11,15 @@ Parser.prototype = {
       var m = [];
       for (var i=1; i < d.length; i++) {
         if (d[i]) {
-          var date = moment(d[i][0], "M/D/YY");
-          date = date.format('YYYY-MM-DD');
-          
+          var date = moment(d[i][0], "M/D/YY").format('YYYY-MM-DD');
+          var amount = Math.round(d[i][3]*100)/100;
+
           Receipts.insert({
             date : date,
             category : d[i][4],
             account : d[i][1],
             payee : d[i][2],
-            amount : d[i][3],
+            amount : amount,
             oldPayee : d[i][5],
             changed : d[i][6]
           });
