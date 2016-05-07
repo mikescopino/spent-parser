@@ -1,13 +1,19 @@
+Receipts = new Mongo.Collection("receipts");
+Expressions = new Mongo.Collection("expressions");
+
+//////////////////////////////////////////
+// Client
+//////////////////////////////////////////
+
 if (Meteor.isClient) {
   parser = new Parser();
 
   Template.parser.events({
     "change #csv-file": function(event, template) {
       template.find('#upload-csv').focus();
-      errorClearMessage();
+      parser.messages.clear();
     },
     "click #upload-csv": function(event, template) {
-      //upload('#csv-file', template);
       template.find('#upload-csv').blur();
       parser.event.uploadFile('#csv-file', template);
     },
@@ -15,7 +21,7 @@ if (Meteor.isClient) {
 
   Template.parser.helpers({
     receipts: function () {
-      return getReceipts();
+      return parser.db.getReceipts();
     },
     errors: function () {
       return Session.get('errors');
@@ -26,30 +32,27 @@ if (Meteor.isClient) {
   });
 
   Template.receiptsList.events({
-    // "click .row": function(event) {
-    //   processEvent(event);
-    // },
     "mouseover .payee": function(event, template) {
-      payeeTooltip(event, 'old-payee', 'show');
+      parser.event.hoverPayee(event, 'old-payee', 'show');
     },
     "mouseout .payee": function(event, template) {
-      payeeTooltip(event, 'old-payee', 'hide');
+      parser.event.hoverPayee(event, 'old-payee', 'hide');
     },
   });
 
   Template.receiptsList.helpers({
     humanDate: function() {
-      //return 'hello';
       return moment(this.date).format("M/DD/YYYY");
     },
     humanAmount: function() {
       return '$' + this.amount;
-    },
-    status: function () {
-      return getReceiptsStatus();
     }
   });
 }
+
+//////////////////////////////////////////
+// Server
+//////////////////////////////////////////
 
 if (Meteor.isServer) {
   Meteor.startup(function() {
@@ -59,4 +62,23 @@ if (Meteor.isServer) {
       }
     });
   });
+}
+
+//////////////////////////////////////////
+// Logging
+//////////////////////////////////////////
+
+logging = true;
+
+log = function log(info) {
+  if (logging) {
+    if(info.constructor === Array) {
+      for (var i = 0; i < info.length; i++) {
+        console.log(info[i]);
+      }
+    }
+    else {
+      console.log(info);
+    }
+  }
 }

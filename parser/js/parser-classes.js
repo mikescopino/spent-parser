@@ -6,6 +6,16 @@ Parser.prototype = {
 
   // Data
   db: {
+    getReceipts: function() {
+      var reply = false;
+      if (Receipts.find({}).count() > 0) {
+        reply = Receipts.find({}, {
+          sort: {date: 1}
+        });
+      }
+
+      return reply;
+    },
     insertReceipt: function(data) {
       var d = data;
       var m = [];
@@ -44,8 +54,29 @@ Parser.prototype = {
 
   // Events
   event: {
+    hoverPayee: function(event, element, direction) {
+      var p = event.currentTarget.parentNode;
+      for (var i = 0; i < p.classList.length; i++) {
+        if (p.classList[i] == 'changed') {
+          Parser.prototype.event.toggleTooltip(event, element, direction);
+        }
+      }
+    },
     resetFileInput: function(template) {
       template.find('#csv-file').value = null;
+    },
+    toggleTooltip: function(event, element, direction) {
+      var target = event.currentTarget.getElementsByClassName(element);
+      switch (direction) {
+        case 'show':
+          target[0].classList.add('show');
+          break;
+        case 'hide':
+          var closeTipTimer = setTimeout(function() {
+            target[0].classList.remove('show');
+          }, 200);
+          break;
+      }
     },
     uploadFile: function (target, template) {
       var id = target;
