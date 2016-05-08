@@ -16,7 +16,7 @@ Parser.prototype = {
 
       return reply;
     },
-    insertReceipt: function(data) {
+    insertReceipt: function(data, db) {
       var d = data;
       var m = [];
       for (var i=1; i < d.length; i++) {
@@ -24,7 +24,7 @@ Parser.prototype = {
           var date = moment(d[i][0], "M/D/YY").format('YYYY-MM-DD');
           var amount = Math.round(d[i][3]*100)/100;
 
-          Receipts.insert({
+          db.insert({
             date : date,
             category : d[i][4],
             account : d[i][1],
@@ -110,13 +110,14 @@ Parser.prototype = {
     cleanData: function(data) {
       var valid = false;
       var d = data;
+      log(d);
       var steps = [
         removeCredits = function(stepData) {
           d = Parser.prototype.process.removeCredits(stepData);
           return d;
         },
         compareToRegEx  = function(stepData) {
-          d = Parser.prototype.process.compareToRegEx(stepData);
+          d = Parser.prototype.process.compareToRegEx(stepData, Expressions);
           return d;
         },
       ];
@@ -139,9 +140,9 @@ Parser.prototype = {
       }
       return valid;
     },
-    compareToRegEx: function(data) {
+    compareToRegEx: function(data, db) {
       var d = data;
-      var regs = Expressions.find({}).fetch();
+      var regs = db.find({}).fetch();
 
       // a. Do we have regular expressions?
       if (regs.length > 0) {
@@ -163,8 +164,6 @@ Parser.prototype = {
                 row[2] = regs[x]['name'];
                 row[4] = regs[x]['category'];
                 row[6] = true;
-                // log(ex +' matched: ' + regs[x]['name']);
-                // log('We stored ' + row[5] + ' as the oldPayee');
               }
             }
           }
@@ -173,7 +172,7 @@ Parser.prototype = {
       }
       else {
         d = false;
-        log('There are no regexs to check against');
+        log('ERROR: There are no regexs to check against');
       }
 
       return d;
@@ -191,8 +190,7 @@ Parser.prototype = {
 
             if (clean) {
               log('> Data ready for display');
-              Parser.prototype.db.insertReceipt(clean);
-
+              Parser.prototype.db.insertReceipt(clean, Receipts);
             }
             else {
               log('ERROR: The data is still dirty');
@@ -232,9 +230,27 @@ Parser.prototype = {
       return valid;
     },
     verifyFormat: function(json) {
-      var valid = false;
+      var valid = true;
+      var e =  Parser.prototype.errors;
       if (json.length > 0) {
-        valid = true;
+        var d = json;
+        if (d[0][0] != 'date') {
+          e.push('Your 1st column must be "date"');
+        }
+        if (d[0][1] != 'account') {
+          e.push('Your 2nd column must be "account"');
+        }
+        if (d[0][2] != 'payee') {
+          e.push('Your 3rd column must be "payee"');
+        }
+        if (d[0][3] != 'amount') {
+          e.push('Your 4th column must be "amount"');
+        }
+        if (e.length > 0) {
+          valid = false;
+          e.unshift('It looks like your CSV file has some formatting issues.');
+          Session.set('errors', e);
+        }
       }
       return valid;
     }
@@ -250,6 +266,7 @@ Parser.prototype = {
       // TODO Show status messages
     },
     clear: function() {
+      Parser.prototype.errors = [];
       Session.set('errors', false);
       Session.set('messages', false);
       log('> Prior status messages cleared');

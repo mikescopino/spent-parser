@@ -8,6 +8,7 @@ $fill: #f5f5f5;
 
 $spent-error: #dd514c;
 $spent-status: #0088cc;
+$spent-success: #4dc142;
 
 /*/////////////////////////////////////////*/
 /* General */
@@ -23,7 +24,12 @@ body {
 }
 
 .container {
+  min-height: 500px;
   padding: 0 30px;
+
+  &.loading {
+    background: url('/img/loading.gif') no-repeat center center;
+  }
 }
 
 h1 {
@@ -194,6 +200,35 @@ button {
       &:last-child {
         margin-bottom: 0;
       }
+    }
+  }
+}
+
+/*/////////////////////////////////////////*/
+/* Tests */
+/*/////////////////////////////////////////*/
+
+ul.tests {
+  width: 600px;
+  margin: 0 auto;
+  padding: 0;
+
+  li {
+    padding: 30px 0;
+    border-bottom: 1px solid #eee;
+    list-style: none;
+  }
+
+  .test {
+    margin-left: 5px;
+    font-weight: bold;
+
+    &.Pass {
+      color: $spent-success;
+    }
+
+    &.Fail {
+      color: $spent-error;
     }
   }
 }

@@ -20,15 +20,15 @@ if (Meteor.isClient) {
   });
 
   Template.parser.helpers({
-    receipts: function () {
+    receipts: function() {
       return parser.db.getReceipts();
     },
-    errors: function () {
+    errors: function() {
       return Session.get('errors');
     },
-    messages: function () {
+    messages: function() {
       return Session.get('messages');
-    },
+    }
   });
 
   Template.receiptsList.events({
