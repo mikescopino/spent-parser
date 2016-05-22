@@ -2,6 +2,26 @@ if (Meteor.isClient) {
 
   Template.unitTests.helpers({
 
+    'compareRegEx': function(event, template) {
+      // var reply = 'Fail';
+      // Expressions.insert({
+      //   name : d[i]['name'],
+      //   reg : d[i]['reg'],
+      //   category: d[i]['category']
+      // });
+      // return reply;
+    },
+
+    'getRegEx': function(event, template) {
+      var reply = 'Fail';
+      var regs = Expressions.find({}).fetch();
+
+      if (regs.length > 0) {
+        reply = 'Pass';
+      }
+      return reply;
+    },
+
     'requireCSV': function(event, template) {
       var reply = 'Pass';
       var file = {
@@ -52,6 +72,7 @@ if (Meteor.isClient) {
       }
       return reply;
     },
+
   });
 
 }

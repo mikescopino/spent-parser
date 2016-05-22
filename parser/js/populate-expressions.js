@@ -1,5 +1,5 @@
-populate = function populate() {
-  var d = expressionLibrary;
+populate = function populate(library) {
+  var d = library;
   for (var i=0; i < d.length; i++) {
     log('Inserting ' + d[i]['name']);
     Expressions.insert({
@@ -10,7 +10,7 @@ populate = function populate() {
   }
 }
 
-expressionLibrary = [
+devRegEx = [
   {
     name : 'Mead Hall',
     reg: 'MEADHALL',

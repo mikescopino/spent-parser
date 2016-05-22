@@ -59,7 +59,8 @@ if (Meteor.isServer) {
     return Meteor.methods({
       clearReceipts: function() {
         return Receipts.remove({});
-      }
+      },
+
     });
   });
 }
