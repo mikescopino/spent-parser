@@ -1,5 +1,3 @@
-# Parse a CSV with Javascript
-
 **To Do**
 
 - Validate if the CSV has the proper headers
